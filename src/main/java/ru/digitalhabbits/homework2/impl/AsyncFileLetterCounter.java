@@ -39,8 +39,6 @@ public class AsyncFileLetterCounter implements FileLetterCounter {
         try {
             return fileReader.readLines(input)
                     .map(line -> CompletableFuture.supplyAsync(() -> letterCounter.count(line), executorService))
-                    .collect(Collectors.toList())
-                    .stream()
                     .map(CompletableFuture::join)
                     .reduce(Collections.emptyMap(), letterCountMerger::merge);
         } finally {
